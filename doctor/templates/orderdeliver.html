@@ -1,0 +1,64 @@
+{% extends "dochome.html" %}
+{% load mathfilters %}
+
+{% block title %}
+<header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> My Orders <span class="w3-right w3-blue" style="padding-left: 20px; padding-right: 20px"> {{ os.count }} orders</span></b></h5>
+  </header>
+{% endblock title %}
+
+{% block content %}
+<div class="w3-row-padding w3-margin-bottom w3-container">
+    <form autocomplete="off" class="w3-center" method="get" action="{% url 'orders_search' %}">
+      <input type="text" placeholder="Search by Order ID .." name="order_idd" id="myInput" style="background-color: #1e2229; color: white; border: 1px solid lightsteelblue; border-radius: 4px; width: 80%" value="{{request.GET.search}}" required>
+      <button type="submit" style="background-color: #1e2229; border: none"><i class="fa fa-search" style="color: lightsteelblue" ></i></button>
+    </form>
+    <br>
+    <a href="#" class="w3-right" style="font-size: larger" onclick="document.getElementById('filter').style.display='block'">Filter By</a><br>
+    <div id="filter" style="display: none" class="w3-center">
+        <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: x-large" class="w3-left" onclick="document.getElementById('filter').style.display='none'" href="#">X</a><br><br>
+        <a href="{% url 'orders_day' %}" class="w3-light-grey" style="font-size: larger">All Orders Today</a><br>
+        <a href="{% url 'orders_not_sent' %}" class="w3-light-grey" style="font-size: larger">All Order not Sent</a><br>
+        <a href="#" class="w3-light-grey" style="font-size: larger" onclick="document.getElementById('deliver_filter').style.display='block'">Delivery Man</a><br>
+        <form id="deliver_filter" style="display: none" method="post" action="">
+            {% csrf_token %}
+            <input type="text" name="ord_deliver" placeholder="DeliveryMan Code" style="border-radius: 5px; width: 70%">
+            <input type="submit" value="Find" style="border-radius: 5px">
+            <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: x-large" onclick="document.getElementById('deliver_filter').style.display='none'" href="#">X</a>
+        </form>
+    </div>
+    <br>
+    {% if dl %}
+    {% if os %}
+    {% for i in os %}
+        <div class="w3-card-4 w3-white w3-center">
+            <h4>Order: {{ i.order_id }}</h4>
+            <h6>Leave: {{ i.leaving_time }}</h6>
+            <h5>Admin: {{ i.admin_uname }}</h5>
+            {% for ii in o %}
+            {% if i.order_id == ii.id %}
+                <h6>To: {{ ii.first_name }} {{ ii.last_name }}</h6>
+                <h6>In: {{ ii.address }} {{ ii.country }}</h6>
+            {% endif %}
+            {% endfor %}
+            <div class="w3-grey" style="padding: 5px">
+            {% for iii in oi %}
+                {% if i.order_id == iii.order_id %}
+                    <h6> {{ iii.quantity }} x {{ iii.product.medicine_name }} x ${{ iii.price }} = ${{ iii.price|mul:iii.quantity }}</h6>
+                {% endif %}
+            {% endfor %}
+            </div>
+        </div><hr>
+    {% endfor %}
+    {% else %}
+    <h4 class="w3-center" style="margin-top: 100px">No Orders to this DeliveryMan code</h4>
+    {% endif %}
+    {% else %}
+    <h4 class="w3-center" style="margin-top: 100px">No DeliveryMan with this code</h4>
+    {% endif %}
+</div>
+
+
+{% endblock content %}
+
+

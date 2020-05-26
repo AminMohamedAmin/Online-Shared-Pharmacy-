@@ -1,0 +1,48 @@
+{% extends "dochome.html" %}
+{% load mathfilters %}
+
+{% block title %}
+<header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> My Feeds <span class="w3-right w3-blue" style="padding-left: 20px; padding-right: 20px"> {{ a.count }} Feeds.</span></b></h5>
+  </header>
+{% endblock title %}
+
+{% block content %}
+<div class="w3-row-padding w3-margin-bottom w3-container">
+            <h5>Feeds</h5>
+        <table class="w3-table w3-striped w3-white">
+            {% for i in a %}
+          <tr>
+            {% if i.type == 'Doctor' %}
+            <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
+            {% elif i.type == 'Admin' %}
+            <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
+            {% elif i.type == 'User'%}
+            <td><i class="fa fa-users w3-text-yellow w3-large"></i></td>
+            {% elif i.type == 'Visitor'%}
+            <td><i class="fa fa-laptop w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Delivery'%}
+            <td><i class="fa fa-bicycle w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Contact'%}
+            <td><i class="fa fa-envelope w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Department'%}
+            <td><i class="fa fa-bars w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Medicine'%}
+            <td><i class="fa fa-medkit w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Medicine_Search' or i.type == 'Medicine_Buy'%}
+            <td><i class="fa fa-plus-square w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Order'%}
+            <td><i class="fa fa-rocket w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Medical_Reply' or i.type == 'Medical_Question'%}
+            <td><i class="fa fa-question-circle w3-text-red w3-large"></i></td>
+            {% endif %}
+            <td class="w3-left">{{ i.action }}.</td>
+            <td class="w3-center">{{ i.type }}.</td>
+            <td class="w3-right"><i>{{ i.created }}</i></td>
+          </tr>
+            {% endfor %}
+        </table>
+</div>
+
+
+{% endblock content %}

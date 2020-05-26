@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 class="pds" style="margin-left: 130px">CheckOut</h1>
+<div class="order-info">
+    <h3>Your Order</h3>
+    <ul>
+        {% for item in cart %}
+            <li>{{item.quantity}} x {{item.medicine.medicine_name}}({{ item.medicine.medicine_price }}) <span> ${{item.total_price}}</span></li>
+        {% endfor %}
+        {% if cart.coupon %}
+            <li>
+                "{{cart.coupon.code}}" ({{cart.coupon.discount}}% off)
+                <span> - ${{cart.get_discount|floatformat:"2"}}</span>
+            </li>
+        {% endif %}
+    </ul><br>
+    {% if cart.coupon %}
+        <p>Total: ${{cart.get_total_price_after_discount}}</p>
+    {% else %}
+        <p>Total: ${{cart.get_total_price}}</p>
+    {% endif %}
+</div>
+
+<form style="margin: auto; margin-top: -20px" method="post" action="." class="order_form">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Place order</button>
+</form>
+</body>
+</html>

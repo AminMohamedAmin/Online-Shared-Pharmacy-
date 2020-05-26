@@ -1,0 +1,28 @@
+{% extends "dochome.html" %}
+{% load mathfilters %}
+
+{% block title %}
+<header class="w3-container" style="padding-top:22px">
+    <h3 class="w3-center">Edit Department {{ dep_edit.id }}</h3>
+  </header>
+{% endblock title %}
+
+{% block content %}
+<br><br>
+<div class="w3-row-padding w3-margin-bottom w3-container">
+    <form method="post" action="{% url 'save_edit_dep' dep_edit.id %}" class="w3-center">
+        {% csrf_token %}
+        <label>Department Name: </label>
+        <input type="text" name="dep_code" value="{{ dep_edit.department_code }}" style="padding: 5px; border-radius: 5px; width: 50%"><br><br>
+        <label>Department Code: </label>
+        <input type="text" name="dep_name" value="{{ dep_edit.department_name }}" style="padding: 5px; border-radius: 5px; width: 50%"><br><br>
+        <label>Department Items: </label>
+        <input type="number" name="dep_items" value="{{ dep_edit.department_items }}" style="padding: 5px; border-radius: 5px; width: 50%"><br><br>
+        <input type="submit" value="Save" style="border-radius: 5px">
+    </form>
+</div>
+
+
+{% endblock content %}
+
+

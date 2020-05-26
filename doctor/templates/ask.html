@@ -1,0 +1,49 @@
+{% extends "dochome.html" %}
+{% load mathfilters %}
+
+{% block title %}
+<header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> My Questions <span class="w3-right w3-blue" style="padding-left: 20px; padding-right: 20px"> {{ q.count }} questions</span></b></h5>
+  </header>
+{% endblock title %}
+
+{% block content %}
+<a href="{% url 'askquestnotreply' %}" class="w3-right" style="font-size: large; padding: 5px">All Questions need Replies</a><br><br>
+<div class="w3-row-padding w3-margin-bottom w3-container">
+    {% for i in q %}
+        <div class="w3-card-4">
+
+        <header class="w3-container w3-grey">
+            <p class="w3-left">Question Number: {{ i.id }}</p>
+            <p class="w3-right">Question Patient: {{ i.user }}</p>
+        </header>
+
+        <div class="w3-container w3-center">
+            <h6>{{ i.created }}</h6>
+            <h3>Question: {{ i.quest }}</h3>
+        </div>
+
+        <div class="w3-container w3-center">
+            {% if i.reply %}
+            <h4>Reply: {{ i.reply }} <span class="w3-right" style="border-left: 3px solid darkgreen; padding-left: 3px">{{ i.admin }}</span></h4>
+            {% else %}
+            <form method="post" action="{% url 'replying' i.id %}">
+                {% csrf_token %}
+                <input type="text" value="{{ i.user }}" name="us" hidden readonly>
+                <input type="text" value="{{ i.quest }}" name="qu" hidden readonly>
+                <input type="text" value="{% if request.user.is_superuser and request.user.is_staff  %}{{ do }}{% else %} {{ da }}{% endif %}" name="ad" hidden readonly>
+                <textarea name="repl" placeholder="type your reply .. " style="width: 90%; border-radius: 5px" required></textarea><br>
+                <button style="border-radius: 5px; background-color: #5cb85c; margin-bottom: 10px">save</button>
+            </form>
+            {% endif %}
+        </div>
+
+        </div><hr>
+    {% endfor %}
+
+</div>
+
+
+{% endblock content %}
+
+

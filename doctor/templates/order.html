@@ -1,0 +1,92 @@
+{% extends "dochome.html" %}
+{% load mathfilters %}
+
+{% block title %}
+<header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> My Orders <span class="w3-right w3-blue" style="padding-left: 20px; padding-right: 20px"> {{ o.count }} orders</span></b></h5>
+  </header>
+{% endblock title %}
+
+{% block content %}
+<div class="w3-row-padding w3-margin-bottom w3-container">
+    <form autocomplete="off" class="w3-center" method="get" action="{% url 'orders_search' %}">
+      <input type="text" placeholder="Search by Order ID .." name="order_idd" id="myInput" style="background-color: #1e2229; color: white; border: 1px solid lightsteelblue; border-radius: 4px; width: 80%" value="{{request.GET.search}}" required>
+      <button type="submit" style="background-color: #1e2229; border: none"><i class="fa fa-search" style="color: lightsteelblue" ></i></button>
+    </form>
+    <br>
+    <a href="#" class="w3-right" style="font-size: larger" onclick="document.getElementById('filter').style.display='block'">Filter By</a><br>
+    <div id="filter" style="display: none" class="w3-center">
+        <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: x-large" class="w3-left" onclick="document.getElementById('filter').style.display='none'" href="#">X</a><br><br>
+        <a href="{% url 'orders_day' %}" class="w3-light-grey" style="font-size: larger">All Orders Today</a><br>
+        <a href="{% url 'orders_not_sent' %}" class="w3-light-grey" style="font-size: larger">All Order not Sent</a><br>
+        <a href="{% url 'orders_not_paid' %}" class="w3-light-grey" style="font-size: larger">All Order Sent but not Paid</a><br>
+        <a href="#" class="w3-light-grey" style="font-size: larger" onclick="document.getElementById('deliver_filter').style.display='block'">Delivery Man</a><br>
+        <form id="deliver_filter" style="display: none" method="post" action="{% url 'orders_deliver' %}">
+            {% csrf_token %}
+            <input type="text" name="ord_deliver" placeholder="DeliveryMan Code" style="border-radius: 5px; width: 70%">
+            <input type="submit" value="Find" style="border-radius: 5px">
+            <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: x-large" onclick="document.getElementById('deliver_filter').style.display='none'" href="#">X</a>
+        </form>
+    </div>
+    <br>
+    {% for i in o %}
+        <div class="w3-card-4">
+
+        <header class="w3-container w3-grey">
+            {% for ii in oi %}
+                {% if i.id == ii.order_id %}
+                    <p> {{ ii.quantity }} x {{ ii.product.medicine_name }} x ${{ ii.price }} = ${{ ii.price|mul:ii.quantity }}</p>
+                {% endif %}
+            {% endfor %}
+        </header>
+
+        <div class="w3-container">
+            <h4><span>Order Number: {{ i.id }}</span> <span class="w3-right">{{ i.created }}</span></h4>
+            <p>Patient Name: {{ i.first_name }} {{ i.last_name }}</p>
+            <p>Patient Email: {{ i.email }}</p>
+            <p>Patient Address: {{ i.street }} - {{ i.address }} - {{ i.country }}</p>
+            <p>Order Sent: {{ i.sent }}
+                {% if i.sent == False %}
+                <a onclick="document.getElementById('order_sent_{{i.id}}').style.display='block'"><button class="w3-red" style="border-radius: 5px">Send</button></a>
+                {% else %}
+                <a onclick="document.getElementById('order_sentt_{{i.id}}').style.display='block'"><button class="w3-green" style="border-radius: 5px">Detail</button></a>
+                {% endif %}
+            </p>
+            <form id="order_sent_{{i.id}}" style="display: none" method="post" action="{% url 'send_order' %}">
+                {% csrf_token %}
+                <input type="number" name="Order_ID" placeholder="Order_ID" style="width: 25%; border-radius: 5px" value="{{ i.id }}" readonly>
+                <input type="text" name="Admin_Username" placeholder="Admin_Username" style="width: 25%; border-radius: 5px" value="{% if request.user.is_superuser and request.user.is_staff  %}{{ do }}{% else %} {{ da }}{% endif %}" readonly>
+                <input type="text" name="DeliveryMan_Code" placeholder="DeliveryMan_Code" style="width: 25%; border-radius: 5px" maxlength="4">
+                <input type="submit" value="Save" class="w3-green">
+                <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: larger" onclick="document.getElementById('order_sent_{{i.id}}').style.display='none'" href="#">X</a>
+            </form>
+            <form id="order_sentt_{{i.id}}" style="display: none" method="post" action="#">
+                {% csrf_token %}
+                {% for ii in os %}
+                    {% if ii.order_id == i.id %}
+                        <input type="number" style="width: 20%; border-radius: 5px" value="{{ ii.order_id}}" readonly>
+                        <input type="text" style="width: 20%; border-radius: 5px" value="{{ ii.admin_uname }}" readonly>
+                        <input type="text" style="width: 20%; border-radius: 5px" value="{{ ii.delivery_man }}" readonly>
+                        <input type="text" style="width: 20%; border-radius: 5px" value="{{ ii.leaving_time }}" readonly>
+                    {% endif %}
+                {% endfor %}
+                <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: larger" onclick="document.getElementById('order_sentt_{{i.id}}').style.display='none'" href="#">X</a>
+            </form>
+            <p>Order paid: {{ i.paid }}
+                {% if i.paid == False %}
+                <a href="{% url 'paid_order' i.id %}"><button class="w3-red" style="border-radius: 5px">Paid</button></a>
+                {% else %}
+                <a><button class="w3-green" style="border-radius: 5px">Paid</button></a>
+                {% endif %}
+            </p>
+        </div>
+
+        </div><hr>
+    {% endfor %}
+
+</div>
+
+
+{% endblock content %}
+
+

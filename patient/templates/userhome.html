@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<title>PHARMACY</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {font-family: "Lato", sans-serif}
+.mySlides {display: none}
+</style>
+<body class="w3-light-grey">
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-center" style="max-width:1500px">
+    <div class="mySlides w3-display-container w3-center">
+        <img src="{% static 'img/ph.jpg' %}" alt="Me" width="1500px" height="500">
+    </div>
+    <div class="mySlides w3-display-container w3-center">
+        <img src="{% static 'img/pharmacy.jpg' %}" alt="Me" width="1500px" height="500">
+    </div>
+    <div class="mySlides w3-display-container w3-center">
+        <img src="{% static 'img/pillsfeat.jpg' %}" alt="Me" width="1500px" height="500">
+    </div>
+
+  <div class="w3-display-middle w3-padding-large w3-border w3-wide w3-text-black w3-center" id="phname">
+    <h1 class="w3-hide-medium w3-hide-small w3-xxxlarge">EL_AMEEN</h1>
+    <h5 class="w3-hide-large" style="white-space:nowrap">EL_AMEEN</h5>
+    <h3 class="w3-hide-medium w3-hide-small">PHARMACY</h3>
+  </div>
+
+    {% if request.user.is_authenticated %}
+    <div class="w3-display-topright w3-blue-grey w3-border w3-wide w3-text-white w3-center" style="position: fixed; border-radius: 10px">
+    <p>Welcome, {{ request.user.username }}</p>
+    <a href="{% url 'droutlog' %}" class="w3-text-blue" style="text-decoration: none">LogOut</a>
+    </div>
+    {% else %}
+    <div class="w3-display-topright w3-blue-grey w3-border w3-wide w3-text-white w3-center" style="position: fixed; border-radius: 10px">
+    <p>Welcome, Visitor</p>
+    <a href="{% url 'droutlog' %}" class="w3-text-blue" style="text-decoration: none">LogOut</a>
+    </div>
+    {% endif %}
+
+  <!-- Navbar (placed at the bottom of the header image) -->
+  <div id="naa" class="w3-bar w3-light-grey w3-round w3-display-bottommiddle w3-hide-small" style="bottom:-16px">
+    <a href="{% url 'userhome' %}" class="w3-bar-item w3-button">Home</a>
+  <a href="{% url 'userhome' %}#sear" class="w3-bar-item w3-button">Search</a>
+  <a class="w3-bar-item w3-button" onclick="document.getElementById('order').style.display='block'">Cart</a>
+    <a href="{% url 'userhome' %}#quest" class="w3-bar-item w3-button">Ask</a>
+    <a href="{% url 'userhome' %}#locate" class="w3-bar-item w3-button">Locations</a>
+    <a href="{% url 'userhome' %}#cont" class="w3-bar-item w3-button">Contact</a>
+  </div>
+</header>
+
+{% block content %}
+<div id="order" class="w3-modal">
+      <div class="w3-modal-content w3-animate-zoom">
+        <div class="w3-container w3-white w3-display-container">
+          <span onclick="document.getElementById('order').style.display='none'" class="w3-button w3-display-topright w3-xlarge">X</span>
+            <div class="w3-container">
+              <h3 class="w3-center">
+                <span>
+                    {% with total_items=cart|length %}
+                    {% if cart|length > 0 %}
+                    Your Cart:
+                    <a href="{% url 'cart:cart_detail' %}">
+                                   {{total_items}} item{{total_items|pluralize}}, ${{cart.get_total_price}}</a>
+                   {% else %}
+                      Your cart is empty
+                    {% endif %}
+                   {% endwith %}
+                </span>
+              </h3>
+
+              <table class="w3-table w3-striped w3-bordered">
+                <thead>
+                    <tr class="w3-green">
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Remove</th>
+                        <th>Unit Price</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if cart %}
+                    {% for item in cart %}
+                        {% with  medicine=item.medicine %}
+                            <tr>
+                                <td>{{medicine.medicine_name}}</td>
+                                <td>
+                                    <form method="post" action="{% url 'cart:cart_add' medicine.id %}#phname">
+                                        {% csrf_token %}
+                                        <span style="float: left">{{item.update_quantity_form.quantity}}</span>
+                                        <span>{{item.update_quantity_form.update}}</span>
+                                        <input type="submit" value="Update" style="border-radius: 5px; padding: 5px">
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="{% url 'cart:cart_remove' medicine.id%}">
+                                        Remove
+                                    </a>
+                                </td>
+                                <td>
+                                    {{item.medicine_price}}
+                                </td>
+                                <td>
+                                    {{item.total_price}}
+                                </td>
+                            </tr>
+
+                        {% endwith %}
+                    {% endfor %}
+                {% else %}
+                    <tr >
+                        <td colspan="4" style="width:100%;text-align:center;">there is no medicines !</td>
+                    </tr>
+                {% endif %}
+                    <tr class="total w3-green">
+                        <td>Total</td>
+                        <td colspan="3"></td>
+                        <td class="num">${{cart.get_total_price}}</td>
+                    </tr>
+                </tbody>
+              </table>
+                <p class="">
+                    <a onclick="document.getElementById('order').style.display='none'" href="#phname" class="w3-green w3-padding w3-left" style="text-decoration: none; border-radius: 10px">Continu Buying more</a>
+                    {% if cart %}
+                        <a href="{% url 'orders:order_create' %}" class="w3-green w3-padding w3-right" style="text-decoration: none; border-radius: 10px">Checkout</a>
+                    {% else %}
+                        <a href="#" class="w3-red w3-padding w3-right" style="text-decoration: none; border-radius: 10px">Checkout</a>
+                    {% endif %}
+                </p>
+            </div><br>
+        </div>
+      </div>
+    </div>
+
+<!-- Navbar on small screens -->
+<div class="w3-center w3-light-grey w3-padding-16 w3-hide-large w3-hide-medium">
+<div class="w3-bar w3-light-grey">
+  <a href="{% url 'userhome' %}" class="w3-bar-item w3-button">Home</a>
+  <a href="{% url 'userhome' %}#sear" class="w3-bar-item w3-button">Search</a>
+  <a onclick="document.getElementById('order').style.display='block'" class="w3-bar-item w3-button">Cart</a>
+    <a href="{% url 'userhome' %}#quest" class="w3-bar-item w3-button">Ask</a>
+    <a href="{% url 'userhome' %}#locate" class="w3-bar-item w3-button">Locations</a>
+    <a href="{% url 'userhome' %}#cont" class="w3-bar-item w3-button">Contact</a>
+</div>
+</div>
+
+<!-- Page content -->
+<br>
+
+<div class="w3-content w3-padding-large w3-margin-top" id="search">
+    <fieldset class="w3-center" id="sear">
+        <legend style="font-size: large">Search for specific Medicine</legend>
+        <form autocomplete="off" method="post" action="{% url 'usersearch' %}#search" style="padding: 10px">
+            {% csrf_token %}
+            <input type="text" name="med" placeholder="Search with Medicine Name or Medicine Code ..." id="myInput" style="background-color: #1e2229; color: white; border: 1px solid lightsteelblue; border-radius: 4px; width: 90%; padding: 5px" required>
+            <button type="submit" style="background-color: #1e2229; border: none"><i class="fa fa-search" style="color: lightsteelblue" ></i></button>
+        </form>
+    </fieldset>
+
+    {% if cart %}
+    <h5 class="w3-center w3-green">{{ text }}</h5>
+    {% endif %}
+
+    <div class="w3-container search w3-black" style="border-radius: 5px">
+        {% if m %}
+        {% for med in m %}
+            <h3>Medicine Name: <b>{{med.medicine_name}}</b> <span class="w3-right w3-tag w3-dark-grey w3-round">${{med.medicine_price}}</span></h3>
+            <p class="w3-text-grey">Medicine Description: {{med.medicine_desc}}</p>
+            <p class="w3-text-grey">Medicine Code: {{med.medicine_code}}</p>
+            <p class="w3-text-grey">Available Quantity: {{med.medicine_quantity}}</p>
+            <form method="post" action="{% url 'cart:cart_add' med.id %}#phname" class="w3-right">
+                {% csrf_token %}
+                {{cart_product_form}}
+                <input type="submit" value="Add to cart" style="border-radius: 5px; padding: 5px">
+            </form><br><hr>
+        {% endfor %}
+        {% elif med and not m %}
+            <p class="w3-center">there is no medicine with this name or code</p>
+        {% endif %}
+    </div><br><br>
+
+    <fieldset class="w3-center" id="quest">
+        <legend style="font-size: large">Ask a Medical Question ?</legend>
+        <div>
+            <br>
+            <form method="post" action="{% url 'checkask' %}#quest">
+                {% csrf_token %}
+                <label>Check previuos Question ?</label>
+                <input type="number" name="check" value="{{ ch.id }}" placeholder="put your question id" style="border-radius: 5px" required>
+                <input type="submit" value="check" style="border-radius: 5px">
+            </form><br>
+            {% if check %}
+                <p>Question: {{ ch.quest }}</p>
+                {% if ch.reply != '' %}
+                    <p>Reply: {{ ch.reply }}</p>
+                {% else %}
+                    <p>Reply: there is no reply yet, back soon</p>
+                {% endif %}
+            {% endif %}
+                <p>{{ tt }}</p>
+        </div><br>
+        <form method="post" action="{% url 'ask' %}#quest" style="padding: 10px">
+            {% csrf_token %}
+            <textarea  name="ask" placeholder="Leave your Question here ..." style="background-color: #1e2229; color: white; border: 1px solid lightsteelblue; border-radius: 4px; width: 100%; height: 200px; resize: none" required></textarea><br>
+            <button type="submit" style="background-color: #1e2229; border: none; color: honeydew">Ask</button>
+        </form>
+        {% if ask %}
+        <h3 class="w3-green">Hello {{ nu }} your question number is {{ n }}, remember that when you back to take reply</h3>
+        <h2 class="w3-green">We will reply soon</h2>
+        {% endif %}
+    </fieldset><br><br>
+
+    <fieldset class="w3-center" id="locate">
+    <legend style="font-size: large">Our Locations</legend>
+    <div class="w3-container w3-content w3-padding-44" style="max-width:800px">
+      <div class="w3-row-padding w3-padding-32" style="margin:0 -16px">
+        <div class="w3-third w3-margin-bottom">
+          <img src="{% static 'img/pharmacy.jpg'%}" alt="New York" style="width:100%; height: 200px" class="w3-hover-opacity">
+          <div class="w3-container w3-white">
+            <p><b>Mansoura</b></p>
+            <p class="w3-opacity">University Street</p>
+            <p>Address in detail</p>
+          </div>
+        </div>
+        <div class="w3-third w3-margin-bottom">
+          <img src="{% static 'img/3d.jpg'%}" alt="Paris" style="width:100%; height: 200px" class="w3-hover-opacity">
+          <div class="w3-container w3-white">
+            <p><b>Cairo</b></p>
+            <p class="w3-opacity">Maadi</p>
+            <p>Address in detail</p>
+          </div>
+        </div>
+        <div class="w3-third w3-margin-bottom">
+          <img src="{% static 'img/33d.jpg'%}" alt="San Francisco" style="width:100%; height: 200px" class="w3-hover-opacity">
+          <div class="w3-container w3-white">
+            <p><b>Beni Suef</b></p>
+            <p class="w3-opacity">Salah Salem Street</p>
+            <p>Address in detail</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </fieldset><br><br>
+
+  <!-- Contact -->
+    <fieldset class="w3-center" id="cont">
+    <legend style="font-size: large">Contact</legend>
+  <div class="w3-light-grey w3-padding " id="contact">
+    <div class=" w3-large w3-margin-bottom">
+        <i class="fa fa-map-marker" style="width:30px"></i> Chicago, US<br>
+        <i class="fa fa-phone" style="width:30px"></i> Phone: +00 151515<br>
+        <i class="fa fa-envelope" style="width:30px"> </i> Email: mail@mail.com<br>
+      </div>
+    <form method="post" action="{% url 'message' %}#cont">
+        {% csrf_token %}
+      <div class="w3-section">
+        <label>Name</label>
+        <input class="w3-input w3-border" type="text" required name="Ne">
+      </div>
+      <div class="w3-section">
+        <label>Email</label>
+        <input class="w3-input w3-border" type="text" required name="El">
+      </div>
+      <div class="w3-section">
+        <label>Message</label>
+        <input class="w3-input w3-border" required name="Me">
+      </div>
+      <button type="submit" class="w3-button w3-block w3-dark-grey">Send</button>
+    </form><br>
+      <p>{{ text }}</p>
+  </div>
+    </fieldset>
+
+    <footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
+  <i class="fa fa-facebook-official w3-hover-opacity"></i>
+  <i class="fa fa-instagram w3-hover-opacity"></i>
+  <i class="fa fa-snapchat w3-hover-opacity"></i>
+  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+  <i class="fa fa-twitter w3-hover-opacity"></i>
+  <i class="fa fa-linkedin w3-hover-opacity"></i>
+  <p class="w3-medium">Powered by <a href="#" target="_blank">AmeenSadek</a></p>
+</footer>
+
+<!-- End page content -->
+</div>
+
+{% endblock content %}
+
+<script>
+// Automatic Slideshow - change image every 4 seconds
+var myIndex = 0;
+carousel();
+
+function carousel() {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  myIndex++;
+  if (myIndex > x.length) {myIndex = 1}
+  x[myIndex-1].style.display = "block";
+  setTimeout(carousel, 4000);
+}
+
+</script>
+<script>
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+/*An array containing all the country names in the world:*/
+var med = {{ medi|safe }};
+/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(document.getElementById("myInput"), med);
+</script>
+</body>
+</html>

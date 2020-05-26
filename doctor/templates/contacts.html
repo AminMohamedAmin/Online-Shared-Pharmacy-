@@ -1,0 +1,33 @@
+{% extends "dochome.html" %}
+{% load mathfilters %}
+
+{% block title %}
+<header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> My Contacts <span class="w3-right w3-blue" style="padding-left: 20px; padding-right: 20px"> {{ c.count }} messages</span></b></h5>
+  </header>
+{% endblock title %}
+
+{% block content %}
+<div class="w3-row-padding w3-margin-bottom w3-container">
+    {% if c %}
+    {% for i in c %}
+        <div class="w3-card-4 w3-center">
+        <header class="w3-container w3-grey">
+            <a href="{% url 'delete_contact' i.id %}" class="w3-right" style="font-size: x-large; text-decoration: none; color: darkred" title="Delete">X</a>
+            <h5>{{ i.name }}</h5>
+            <h5>{{ i.email }}</h5>
+            <h5>{{ i.message }}</h5>
+            <h5>{{ i.created }}</h5>
+        </header>
+        </div><hr>
+    {% endfor %}
+    {% else %}
+    <h5 class="w3-center" style="margin-top: 100px">No Messages .. </h5>
+    {% endif %}
+
+</div>
+
+
+{% endblock content %}
+
+

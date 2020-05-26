@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<title>pharmacy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
+.w3-row-padding img {margin-bottom: 12px}
+.bgimg {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('{% static 'img/pillsfeat.jpg' %}');
+  min-height: 100%;
+}
+</style>
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)}
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+<body>
+
+<!-- Sidebar with image -->
+<nav class="w3-sidebar w3-hide-medium w3-hide-small" style="width:40%">
+  <div class="bgimg"></div>
+</nav>
+
+<!-- Page Content -->
+<div class="w3-main w3-padding-large" style="margin-left:40%">
+    <div class="w3-left">
+        <h6>Views</h6>
+        <img src="https://hitwebcounter.com/counter/counter.php?page=7283325&style=0006&nbdigits=5&type=page&initCount=0"></a>
+    </div>
+    <div class="w3-right">
+        <h6>Viewers</h6>
+        <img src="https://hitwebcounter.com/counter/counter.php?page=7283326&style=0006&nbdigits=5&type=ip&initCount=0"></a>
+    </div>
+  <!-- Header -->
+  <header class="w3-container w3-center" style="padding:128px 16px" id="home">
+    <h1 class="w3-jumbo"><b>PHARMACY</b></h1>
+    <h3>EL AMEEN</h3>
+    <img src="/w3images/profile_girl.jpg" class="w3-image w3-hide-large w3-hide-small w3-round" style="display:block;width:60%;margin:auto;">
+    <img src="/w3images/profile_girl.jpg" class="w3-image w3-hide-large w3-hide-medium w3-round" width="1000" height="1333">
+    <button class="w3-button w3-light-grey w3-padding-large w3-margin-top" style="width: 100%" onclick="document.getElementById('id01').style.display='block'">Patient</button>
+    <div id="id01" class="modal">
+        <div class="modal-content animate" style="width: 50%">
+        <div class="imgcontainer">
+          <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+          <img src="{% static 'img/user.png' %}" width="20%">
+        </div>
+
+        <h3>Login as Visitor</h3>
+        <a href="{% url 'visit' %}"><button style="width: 95%" class="w3-blue" >Visit</button></a>
+        <h4> OR </h4>
+
+        <h3>Login as User</h3>
+        <div class="container" style="float: left; width: 50%">
+            <form method="post" action="{% url 'userlogin' %}">
+            {% csrf_token %}
+          <label for="uname"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="uuname">
+
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="ppsw">
+
+          <button type="submit" class="w3-blue">Login</button>
+{#          <label>#}
+{#            <input type="checkbox" checked="checked" name="remember"> Remember me#}
+{#          </label>#}
+            </form>
+        </div>
+
+        <div class="container" style="float: left; width: 50%">
+            <form method="post" action="{% url 'usersign' %}">
+            {% csrf_token %}
+          <label for="uname"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="uname">
+
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw">
+
+          <button type="submit" class="w3-blue">Sign Up</button>
+          <label>
+{#            <input type="checkbox" checked="checked" name="remember"> Remember me#}
+          </label>
+            </form>
+        </div>
+
+        <div class="container" style="background-color:#f1f1f1">
+          <p class="psw">Welcome ! <a href="#"></a></p>
+        </div>
+      </div >
+        </div>
+    <p class=" w3-padding-large w3-margin-top"> OR </p>
+    <button class="w3-button w3-light-grey w3-padding-large w3-margin-top" style="width: 100%" onclick="document.getElementById('id02').style.display='block'">Doctor</button>
+    <p>{{ text }}</p>
+    <div id="id02" class="modal">
+
+    <div class="modal-content animate" style="width: 50%">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <img src="{% static 'img/user.png' %}" width="20%">
+    </div>
+
+    <div class="container">
+        <form method="post" action="{% url 'savelogin' %}">
+            {% csrf_token %}
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="unamee" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psww" required>
+
+      <button type="submit" class="w3-blue">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+        </form>
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+      <p class="psw">Forgot <a href="#" onclick="document.getElementById('forget').style.display='block'">password?</a></p>
+    </div>
+
+    <form id="forget" style="display: none" method="post" action="">
+        {% csrf_token %}
+        <input type="email" name="forget" placeholder="Enter Your Email ... " style="width: 80%; border-radius: 5px; padding: 5px; margin-top: 10px">
+        <input type="password" name="new" placeholder="Add new Password ... " style="width: 80%; border-radius: 5px; padding: 5px"><br>
+        <input type="submit" value="Save" style="border-radius: 5px"><br>
+    </form><br>
+  </div>
+</div>
+  </header>
+
+</div>
+
+
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>

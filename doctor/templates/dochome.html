@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+{% load static %}
+{% load mathfilters %}
+<html>
+<title>Pharmacy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+
+.sidebar-header .user-pic {
+  float: left;
+  width: 60px;
+  padding: 2px;
+  border-radius: 12px;
+  margin-right: 15px;
+}
+
+.sidebar-header .user-pic img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar-header .user-info {
+  float: left;
+}
+
+.sidebar-header .user-info > span {
+  display: block;
+}
+
+.sidebar-header .user-info .user-role {
+  font-size: 12px;
+}
+
+.sidebar-header .user-info .user-status {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+</style>
+<body class="w3-light-grey">
+
+<!-- Top container -->
+<div class="w3-bar w3-top w3-large" style="z-index:4; background-color: #1e2229; color: white; border-bottom: 1px solid honeydew">
+  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+    <span class="w3-bar-item w3-right">SkyPharm <i class="fa fa-spinner w3-spin"></i></span>
+</div>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-animate-left" style="z-index:3;width:300px; background-color: #1e2229; color: white" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+      <div class="sidebar-header">
+        <div class="user-pic">
+          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture" style="width: 60px; height: 70px">
+        </div>
+        <div class="user-info">
+          <span class="user-name">
+            <strong><span>Welcome, <strong style="color: #5cb85c">{% if request.user.is_superuser and request.user.is_staff  %}Dr. {{ request.user.username }}{% else %} Dr. Assistant{% endif %}</strong></span> <i class="fa fa-user-md"></i><br></strong>
+          </span>
+            {% if request.user.is_superuser and request.user.is_staff  %}
+          <strong style="color: #5cb85c">SuperAdmin</strong>
+            {% else %}
+            <strong style="color: #5cb85c">Admin</strong>
+            {% endif %}
+          <span class="user-status">
+            <i class="fa fa-circle" style="color: green"></i>
+            <span>Online</span>
+          </span><br>
+        </div>
+      </div>
+    <div class="w3-bar">
+        <a href="{% url 'user' %}" class="w3-bar-item w3-button notification" title="New Users and Visitors"><i class="fa fa-user" style="font-size: x-large"></i><span style="color: red"><strong>{{ uu.count }}</strong></span></a>
+        <a href="{% url 'askquest' %}" class="w3-bar-item w3-button notification" title="New Medical Questions"><i class="fa fa-question-circle" style="font-size: x-large"></i><span style="color: red"><strong>{{ qq.count }}</strong></span></a>
+        <a href="{% url 'orders' %}" class="w3-bar-item w3-button notification" title="New Orders"><i class="fa fa-motorcycle" style="font-size: x-large"></i><span style="color: red"><strong>{{ oo.count }}</strong></span></a>
+        <a href="{% url 'droutlog' %}" class="w3-bar-item w3-button notification" title="LogOut"><i class="fa fa-power-off" style="font-size: x-large"></i></a>
+    </div>
+  </div><br>
+    <form class="w3-center" action="#">
+      <input type="text" placeholder="Search.." name="search" style="background-color: #1e2229; color: white; border: 1px solid lightsteelblue; border-radius: 4px; width: 80%" readonly>
+      <button type="submit" style="background-color: #1e2229; border: none"><i class="fa fa-search" style="color: lightsteelblue" ></i></button>
+    </form><br>
+  <div class="w3-container w3-red">
+    <h5>Dashboard</h5>
+  </div>
+  <div class="w3-bar-block">
+    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+    <a href="{% url 'doc_home' %}" class="w3-bar-item w3-button w3-padding w3-hover-text-red"><i class="fa fa-home"></i>  Home <i class="fa fa-spinner w3-spin w3-right"></i></a>
+    <a href="{% url 'dep' %}" class="w3-bar-item w3-button w3-padding w3-hover-text-red"><i class="fa fa-bars"></i>  Departments <i class="fa fa-spinner w3-spin w3-right"></i></a>
+    <a href="{% url 'med' %}" class="w3-bar-item w3-button w3-padding w3-hover-text-red"><i class="fa fa-medkit"></i>  Medicines <i class="fa fa-spinner w3-spin w3-right"></i></a>
+    <a href="{% url 'user' %}" class="w3-bar-item w3-button w3-padding w3-hover-text-red"><i class="fa fa-users"></i>  Users <i class="fa fa-spinner w3-spin w3-right"></i></a>
+    <a href="{% url 'orders' %}" class="w3-bar-item w3-button w3-padding w3-hover-text-red"><i class="fa fa-ambulance"></i>  Orders <i class="fa fa-spinner w3-spin w3-right"></i></a>
+    <a href="{% url 'askquest' %}" class="w3-bar-item w3-button w3-padding w3-hover-text-red"><i class="fa fa-question-circle"></i>  Questions <i class="fa fa-spinner w3-spin w3-right"></i></a>
+    <a href="{% url 'contact' %}" class="w3-bar-item w3-button w3-padding w3-hover-text-red"><i class="fa fa-envelope"></i>  Messages <i class="fa fa-spinner w3-spin w3-right"></i></a>
+  </div>
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+  <!-- Header -->
+    {% block title %}
+  <header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
+  </header>
+    {% endblock title %}
+    {% block content %}
+  <div class="w3-row-padding w3-margin-bottom">
+      <div class="w3-quarter">
+      <div class="w3-container w3-red w3-padding-16">
+        <div class="w3-left"><i class="fa fa-bars w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{d.count}}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Departments</h4>
+      </div>
+    </div>
+      <div class="w3-quarter">
+      <div class="w3-container w3-blue w3-padding-16">
+        <div class="w3-left"><i class="fa fa-medkit w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{ m.count }}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Medicines</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-green w3-padding-16">
+        <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{ q.count }}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Questions</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-yellow w3-padding-16">
+        <div class="w3-left"><i class="fa fa-eye w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>{{ o.count }}</h3>
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Orders</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-panel">
+    <div class="w3-row-padding" style="margin:0 -16px">
+      <div class="w3-third">
+        <h5>Regions</h5>
+          <h3> Meet Massoud <i class="fa fa-circle w3-right" style="color: green"></i></h3>
+          <h3> Ekhtab <i class="fa fa-circle w3-right"></i></h3>
+          <h3> Damas <i class="fa fa-circle w3-right"></i></h3>
+      </div>
+      <div class="w3-twothird">
+        <h5>Today Feeds</h5>
+        <table class="w3-table w3-striped w3-white">
+            {% for i in a %}
+          <tr>
+            {% if i.type == 'Doctor' %}
+            <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
+            {% elif i.type == 'Admin' %}
+            <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
+            {% elif i.type == 'User'%}
+            <td><i class="fa fa-users w3-text-yellow w3-large"></i></td>
+            {% elif i.type == 'Visitor'%}
+            <td><i class="fa fa-laptop w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Delivery'%}
+            <td><i class="fa fa-bicycle w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Contact'%}
+            <td><i class="fa fa-envelope w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Department'%}
+            <td><i class="fa fa-bars w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Medicine'%}
+            <td><i class="fa fa-medkit w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Medicine_Search' or i.type == 'Medicine_Buy'%}
+            <td><i class="fa fa-plus-square w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Order'%}
+            <td><i class="fa fa-rocket w3-text-red w3-large"></i></td>
+            {% elif i.type == 'Medical_Reply' or i.type == 'Medical_Question'%}
+            <td><i class="fa fa-question-circle w3-text-red w3-large"></i></td>
+            {% endif %}
+            <td class="w3-left">{{ i.action }}.</td>
+            <td class="w3-center">{{ i.type }}.</td>
+            <td class="w3-right"><i>{{ i.created }}</i></td>
+          </tr>
+            {% endfor %}
+{#          <tr>#}
+{#            <td><i class="fa fa-bell w3-text-red w3-large"></i></td>#}
+{#            <td>Database error.</td>#}
+{#            <td><i>15 mins</i></td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td><i class="fa fa-users w3-text-yellow w3-large"></i></td>#}
+{#            <td>New record, over 40 users.</td>#}
+{#            <td><i>17 mins</i></td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td><i class="fa fa-comment w3-text-red w3-large"></i></td>#}
+{#            <td>New comments.</td>#}
+{#            <td><i>25 mins</i></td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td><i class="fa fa-bookmark w3-text-blue w3-large"></i></td>#}
+{#            <td>Check transactions.</td>#}
+{#            <td><i>28 mins</i></td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td><i class="fa fa-laptop w3-text-red w3-large"></i></td>#}
+{#            <td>CPU overload.</td>#}
+{#            <td><i>35 mins</i></td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td><i class="fa fa-share-alt w3-text-green w3-large"></i></td>#}
+{#            <td>New shares.</td>#}
+{#            <td><i>39 mins</i></td>#}
+{#          </tr>#}
+        </table>
+        <a href="{% url 'feeds' %}"><button class="w3-button w3-dark-grey">More Feeds <i class="fa fa-arrow-right"></i></button></a>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5>General Stats</h5>
+    <p>New Visitors</p>
+    <div class="w3-grey">
+      <div class="w3-container w3-center w3-padding w3-green" style="width:
+            {% if visitor_yesterday.count == 0 %}
+            {{ visitor_today.count|sub:visitor_yesterday.count|div:1|mul:100|floatformat:"2"}}%
+            {% else %}
+            {{ visitor_today.count|sub:visitor_yesterday.count|div:visitor_yesterday.count|mul:100|floatformat:"2"}}%
+            {% endif %}
+      ; max-width: 100%">
+            {% if visitor_yesterday.count == 0 %}
+            +{{ visitor_today.count|sub:visitor_yesterday.count|div:1|mul:100|floatformat:"2"}}%
+            {% else %}
+            +{{ visitor_today.count|sub:visitor_yesterday.count|div:visitor_yesterday.count|mul:100|floatformat:"2"}}%
+            {% endif %}
+        </div>
+    </div>
+
+    <p>New Users</p>
+    <div class="w3-grey">
+        <div class="w3-container w3-center w3-padding w3-blue" style="width:
+            {% if user_yesterday.count == 0 %}
+            {{ user_today.count|sub:user_yesterday.count|div:1|mul:100|floatformat:"2"}}%
+            {% else %}
+            {{ user_today.count|sub:user_yesterday.count|div:user_yesterday.count|mul:100|floatformat:"2"}}%
+            {% endif %}
+        ;max-width: 100%">
+            {% if user_yesterday.count == 0 %}
+            +{{ user_today.count|sub:user_yesterday.count|div:1|mul:100|floatformat:"2"}}%
+            {% else %}
+            +{{ user_today.count|sub:user_yesterday.count|div:user_yesterday.count|mul:100|floatformat:"2"}}%
+            {% endif %}
+        </div>
+    </div>
+
+    <p>New Orders</p>
+    <div class="w3-grey">
+        <div class="w3-container w3-center w3-padding w3-red" style="width:
+            {% if order_yesterday.count == 0 %}
+            {{ order_today.count|sub:order_yesterday.count|div:1|mul:100|floatformat:"2"}}%
+            {% else %}
+            {{ order_today.count|sub:order_yesterday.count|div:order_yesterday.count|mul:100|floatformat:"2"}}%
+            {% endif %}
+        ;max-width: 100%">
+            {% if order_yesterday.count == 0 %}
+            +{{ order_today.count|sub:order_yesterday.count|div:1|mul:100|floatformat:"2"}}%
+            {% else %}
+            +{{ order_today.count|sub:order_yesterday.count|div:order_yesterday.count|mul:100|floatformat:"2"}}%
+            {% endif %}
+        </div>
+    </div>
+  </div>
+  <hr>
+
+  <div class="w3-container">
+    <h5>Order Cities</h5>
+    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+        {% for i in cities_list %}
+            <tr>
+                <td>{{ i.0 }}</td>
+                <td>{{ i.1|div:o.count|mul:100|floatformat:"2" }} %</td>
+            </tr>
+        {% endfor %}
+    </table>
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5>Most Users take Orders</h5>
+    <ul class="w3-ul w3-card-4 w3-white">
+    {% for i in users_list %}
+      <li class="w3-padding-16">
+          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture" style="width: 60px; height: 70px">
+        <span class="w3-xlarge">{{ i.0 }} {{ i.1 }} <span style="color: darkred"> from </span> {{ i.2 }} , {{ i.3 }} , {{ i.4 }} <span style="color: darkgreen"> takes </span> {{ i.5 }} <span style="color: darkcyan"> orders </span></span><br>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+  <hr>
+
+  <div class="w3-container">
+    <h5>Recent Question</h5>
+    <div class="w3-row w3-center">
+      <div class="w3-col m10 w3-container">
+      <i class="fa fa-question-circle w3-center" style="font-size: xx-large">
+        {% if last_quest %}
+        <h4>{{last_quest.user}} <span class="w3-opacity w3-medium">{{ last_quest.created }}</span></h4>
+        <p>Question: {{ last_quest.quest }} ?</p>
+        <p>Reply: {% if last_quest.reply  %} Yes, you replied. {% else %} Not exist, you have to reply. {% endif %}</p>
+        {% else %}
+          <p>thers is no questions</p>
+        {% endif %}
+      </i><br>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-container">
+    <h5>Recent Message</h5>
+    <div class="w3-row w3-center">
+      <div class="w3-col m10 w3-container">
+      <i class="fa fa-envelope w3-center" style="font-size: xx-large">
+          {% if last_message %}
+        <h4>{{last_message.name}} <span class="w3-opacity w3-medium">{{ last_message.created }}</span></h4>
+        <p>Message: {{ last_message.message }} ?</p>
+        <p>Email: {{ last_message.email }} ?</p>
+          {% else %}
+          <p>thers is no messages</p>
+          {% endif %}
+        </i><br>
+      </div>
+    </div>
+  </div>
+    {% endblock content %}
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+    overlayBg.style.display = "none";
+  } else {
+    mySidebar.style.display = 'block';
+    overlayBg.style.display = "block";
+  }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+  mySidebar.style.display = "none";
+  overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>

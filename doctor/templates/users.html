@@ -1,0 +1,139 @@
+{% extends "dochome.html" %}
+{% load mathfilters %}
+
+{% block title %}
+<header class="w3-container" style="padding-top:22px">
+    <h5><b><i class="fa fa-dashboard"></i> My Users <span class="w3-right w3-blue" style="padding-left: 20px; padding-right: 20px">{{ ad.count }} admins, {{ dl.count }} deliveryman, {{ u.count }} users, {{ v.count }} visitors</span></b></h5>
+  </header>
+{% endblock title %}
+
+{% block content %}
+<br>
+<div class="w3-row-padding w3-margin-bottom w3-container">
+    <table class="w3-table-all">
+    <thead>
+      <tr class="w3-red" >
+          <th style="text-align: center">#</th>
+          <th style="text-align: center">Admin_name</th>
+        <th style="text-align: center">Email</th>
+        <th style="text-align: center">Is Superuser</th>
+        <th style="text-align: center">Is Staff</th>
+        <th style="text-align: center">Is Active</th>
+        <th style="text-align: center">Date Joined</th>
+        <th style="text-align: center">Last Login</th>
+        {% if request.user.is_superuser %}
+        <th style="text-align: center"></th>
+        {% endif %}
+      </tr>
+    </thead>
+      {% for i in ad %}
+    <tr>
+        <td style="text-align: center">{{ i.id }}</td>
+        <td style="text-align: center">{{ i.username }}</td>
+        <td style="text-align: center">{{ i.email }}</td>
+        <td style="text-align: center">{{ i.is_superuser }}</td>
+        <td style="text-align: center">{{ i.is_staff }}</td>
+        <td style="text-align: center">{{ i.is_active }}</td>
+        <td style="text-align: center">{{ i.date_joined }}</td>
+        <td style="text-align: center">{{ i.last_login }}</td>
+        {% if request.user.is_superuser %}
+            {% if i.is_superuser == False %}
+                <td style="text-align: center"><a href="{% url 'delete_admin' i.id %}" class="w3-red">Delete</a></td>
+            {% endif %}
+        {% endif %}
+    </tr>
+      {% endfor %}
+  </table>
+    <a onclick="document.getElementById('add_admin').style.display='block'" href="#"><button style="width: 100%">Add Admin</button></a>
+    <br><br>
+
+    <form style="display: none" id="add_admin" method="post" action="{% url 'add_admin' %}" class="w3-center">
+        {% csrf_token %}
+        {% if request.user.is_superuser %}
+        <input type="text" name="ad_name" placeholder="Add UserName" style="padding: 5px; border-radius: 5px; width: 25%">
+        <input type="email" name="ad_email" placeholder="Add Email" style="padding: 5px; border-radius: 5px; width: 30%">
+        <input type="password" name="ad_pass" placeholder="Add Password" style="padding: 5px; border-radius: 5px; width: 20%">
+        <input type="submit" value="Add" style="border-radius: 5px">
+        <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: larger" onclick="document.getElementById('add_admin').style.display='none'" href="#">X</a>
+        {% else %}
+        <h5 class="w3-center">You haven't permission .. Superuser only can do that.</h5>
+        <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: larger" onclick="document.getElementById('add_admin').style.display='none'" href="#">X</a>
+        {% endif %}
+    </form>
+</div>
+<div class="w3-row-padding w3-margin-bottom w3-container">
+    <table class="w3-table-all">
+    <thead>
+      <tr class="w3-red" >
+          <th style="text-align: center">#</th>
+          <th style="text-align: center">Name</th>
+        <th style="text-align: center">Address</th>
+        <th style="text-align: center">N_ID</th>
+        <th style="text-align: center">Code</th>
+        <th style="text-align: center"></th>
+      </tr>
+    </thead>
+      {% for i in dl %}
+    <tr>
+        <td style="text-align: center">{{ i.id }}</td>
+        <td style="text-align: center">{{ i.name }}</td>
+        <td style="text-align: center">{{ i.address }}</td>
+        <td style="text-align: center">{{ i.NID }}</td>
+        <td style="text-align: center">{{ i.code }}</td>
+        {% if request.user.is_superuser %}
+            <td style="text-align: center"><a href="{% url 'delete_deliver' i.id %}" class="w3-red">Delete</a></td>
+        {% endif %}
+    </tr>
+      {% endfor %}
+  </table>
+    <a onclick="document.getElementById('add_delivery').style.display='block'" href="#"><button style="width: 100%">Add Deliver Man</button></a>
+    <br><br>
+
+    <form style="display: none" id="add_delivery" method="post" action="{% url 'add_deliver' %}" class="w3-center">
+        {% csrf_token %}
+        {% if request.user.is_superuser %}
+        <input type="text" name="dl_name" placeholder="Add Name" style="padding: 5px; border-radius: 5px; width: 20%">
+        <input type="text" name="dl_address" placeholder="Add Address in detail" style="padding: 5px; border-radius: 5px; width: 20%">
+        <input type="tel" name="dl_nid" maxlength="14" placeholder="Add NID" style="padding: 5px; border-radius: 5px; width: 20%">
+        <input type="tel" name="dl_code" maxlength="4" placeholder="Add Code" style="padding: 5px; border-radius: 5px; width: 20%">
+        <input type="submit" value="Add" style="border-radius: 5px">
+        <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: larger" onclick="document.getElementById('add_delivery').style.display='none'" href="#">X</a>
+        {% else %}
+        <h5 class="w3-center">You haven't permission .. Superuser only can do that.</h5>
+        <a style="color: darkred; text-decoration: none; margin-left: 30px; font-size: larger" onclick="document.getElementById('add_delivery').style.display='none'" href="#">X</a>
+        {% endif %}
+    </form>
+</div>
+<div class="w3-row-padding w3-margin-bottom w3-container">
+    <table class="w3-table-all">
+    <thead>
+      <tr class="w3-red" >
+          <th style="text-align: center">#</th>
+          <th style="text-align: center">Username</th>
+        <th style="text-align: center">Email</th>
+        <th style="text-align: center">Is Superuser</th>
+        <th style="text-align: center">Is Staff</th>
+        <th style="text-align: center">Is Active</th>
+        <th style="text-align: center">Date Joined</th>
+        <th style="text-align: center">Last Login</th>
+      </tr>
+    </thead>
+      {% for i in u %}
+    <tr>
+        <td style="text-align: center">{{ i.id }}</td>
+        <td style="text-align: center">{{ i.username }}</td>
+        <td style="text-align: center">{{ i.email }}</td>
+        <td style="text-align: center">{{ i.is_superuser }}</td>
+        <td style="text-align: center">{{ i.is_staff }}</td>
+        <td style="text-align: center">{{ i.is_active }}</td>
+        <td style="text-align: center">{{ i.date_joined }}</td>
+        <td style="text-align: center">{{ i.last_login }}</td>
+    </tr>
+      {% endfor %}
+  </table>
+
+</div>
+
+{% endblock content %}
+
+

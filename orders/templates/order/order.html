@@ -1,0 +1,34 @@
+{% extends 'userhome.html' %}
+
+{% block content %}
+    <br><br>
+<div class="w3-container">
+    <fieldset class="w3-center">
+    <legend style="font-size: large">Your Order</legend>
+    {% for item in cart %}
+    <div class="w3-container">
+        <ul>
+            <li><span class="w3-left">{{item.quantity}} x {{item.medicine.medicine_name}}</span><span class="w3-center">${{ item.medicine.medicine_price }} per one</span><span class="w3-right">${{ item.total_price }} total</span></li>
+        </ul>
+    </div>
+    {% endfor %}
+
+    <footer class="w3-container w3-grey">
+      <h5> Total: ${{cart.get_total_price}}</h5>
+    </footer>
+    </fieldset>
+    <fieldset class="w3-center">
+    <legend style="font-size: large">Personal Information</legend>
+    <form style="padding: 10px;" method="post" action="." class="w3-center">
+    {% csrf_token %}
+    <p> {{ form.first_name }} </p>
+    <p> {{ form.last_name }} </p>
+    <p> {{ form.email }} </p>
+    <p> {{ form.street }} </p>
+    <p> {{ form.address }} </p>
+    <p> {{ form.country }} </p>
+    <button type="submit" style="border-radius: 5px">Place order</button>
+    </form>
+    </fieldset>
+</div>
+{% endblock content %}

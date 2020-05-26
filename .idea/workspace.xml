@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="cd30cbcd-7d3c-45e5-9ae6-ff542daaebca" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1auTKrNA4HhyY9ehFEBzXeUwAhG" />
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Ameen\Desktop\pharmacy\pharm\cart\templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Ameen\Desktop\pharmacy\pharm\orders\static\css" />
+      <recent name="C:\Users\Ameen\Desktop\pharmacy\pharm\orders" />
+      <recent name="C:\Users\Ameen\Desktop\pharmacy\pharm\cart" />
+      <recent name="C:\Users\Ameen\Desktop\pharmacy\pharm\patient" />
+      <recent name="C:\Users\Ameen\Desktop\pharmacy\pharm\doctor" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="pharm" type="Python.DjangoServer" factoryName="Django server">
+      <module name="pharm" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cd30cbcd-7d3c-45e5-9ae6-ff542daaebca" name="Default Changelist" comment="" />
+      <created>1587584417443</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1587584417443</updated>
+      <workItem from="1587584439839" duration="13882000" />
+      <workItem from="1587605566852" duration="6292000" />
+      <workItem from="1587655647122" duration="9513000" />
+      <workItem from="1587723694995" duration="3020000" />
+      <workItem from="1587726739668" duration="770000" />
+      <workItem from="1587821398878" duration="15759000" />
+      <workItem from="1587929701653" duration="15568000" />
+      <workItem from="1587999369554" duration="61397000" />
+      <workItem from="1588169308080" duration="19173000" />
+      <workItem from="1588255650041" duration="16005000" />
+      <workItem from="1588623219790" duration="783000" />
+      <workItem from="1588729335473" duration="5394000" />
+      <workItem from="1589334188085" duration="421000" />
+      <workItem from="1589903002483" duration="901000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+</project>

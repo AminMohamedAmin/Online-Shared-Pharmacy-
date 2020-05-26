@@ -1,0 +1,44 @@
+{% extends "dochome.html" %}
+{% load mathfilters %}
+
+{% block title %}
+<header class="w3-container" style="padding-top:22px">
+    <h3 class="w3-center">Edit Medicine {{ med_edit.id }} that existed in Department {{ med_edit.department_id }}</h3>
+  </header>
+{% endblock title %}
+
+{% block content %}
+<br><br>
+<div class="w3-row-padding w3-margin-bottom w3-container">
+    <form method="post" action="{% url 'save_edit_med' med_edit.id %}" class="w3-center">
+        {% csrf_token %}
+        <label>Department Code: </label>
+        <select style="padding: 5px; border-radius: 5px; width: 50%" name="dep_code">
+            <option>Dep Code</option>
+            {% for i in d %}
+                {% if i.id == med_edit.department_id %}
+                    <option selected>{{ i.department_code }}</option>
+                {% else %}
+                    <option>{{ i.department_code }}</option>
+                {% endif %}
+
+            {% endfor %}
+        </select><br><br>
+        <label style="margin-right: 20px">Medicine Code: </label>
+        <input type="text" name="med_code" value="{{ med_edit.medicine_code }}" style="padding: 5px; border-radius: 5px; width: 50%"><br><br>
+        <label style="margin-right: 14px">Medicine Name: </label>
+        <input type="text" name="med_name" value="{{ med_edit.medicine_name }}" style="padding: 5px; border-radius: 5px; width: 50%"><br><br>
+        <label>Medicine Quantity: </label>
+        <input type="number" name="med_quant" value="{{ med_edit.medicine_quantity }}" style="padding: 5px; border-radius: 5px; width: 50%"><br><br>
+        <label style="margin-right: 23px">Medicine Price: </label>
+        <input type="number" name="med_price" value="{{ med_edit.medicine_price }}" style="padding: 5px; border-radius: 5px; width: 50%"><br><br>
+        <label style="margin-right: 22px">Medicine Desc: </label>
+        <input type="text" name="med_desc" value="{{ med_edit.medicine_desc }}" style="padding: 5px; border-radius: 5px; width: 50%"><br><br>
+        <input type="submit" value="Save" style="border-radius: 5px">
+    </form>
+</div>
+
+
+{% endblock content %}
+
+
